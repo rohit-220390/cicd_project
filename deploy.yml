@@ -7,5 +7,5 @@
 
   tasks:
   - name: Copy WAR to Remote server
-    remote_src: True
-    copy: src=target/{{ warName }} dest={{ warRemotePath }}/{{ warName }} owner=labsuser group=labsuser
+    copy: 
+      remote_src: True src=target/{{ warName }} dest={{ warRemotePath }}/{{ warName }} owner=labsuser group=labsuser
