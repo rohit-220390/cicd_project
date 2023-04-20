@@ -9,5 +9,5 @@
   - name: Copy WAR to Remote server
     copy: 
       remote_src: True 
-      src: /cicd_project/target/{{ warName }} 
+      src: cicd_project/target/{{ warName }} 
       dest: /{{ warRemotePath }}/{{ warName }} owner=labsuser group=labsuser
