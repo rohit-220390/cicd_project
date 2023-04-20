@@ -10,4 +10,4 @@
     copy: 
       remote_src: True 
       src: target/{{ warName }} 
-      dest: /{{ warRemotePath }}/{{ warName }} owner=labsuser group=labsuser
+      dest: /{{ warRemotePath }}/{{ warName }}
