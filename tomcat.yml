@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  vars:
+    - http_port: 8080
+    - tomcat_version: 10.1.7
+    - tomcat_install_dir: /opt
+
+  tasks:
+    - name: Install OpenJDK
+      apt: name=openjdk-11-jdk state=latest
+
+    - name: add group "tomcat"
+      group: name=tomcat
+      become: true
+
+    - name: add user "tomcat"
+      user: name=tomcat group=tomcat createhome=yes
+      become: true
+
+    - name: Download Apache Tomcat
+      get_url:
+        url: "http://mirror.cogentco.com/pub/apache/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        dest: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
+
+    - name: Extract Apache Tomcat
+      unarchive:
+        src: "{{ tomcat_install_dir }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        dest: "{{ tomcat_install_dir }}"
+        copy: no
+
+    - name: Change ownership of Tomcat installation
+      file: path=/opt/apache-tomcat-{{ tomcat_version }} owner=tomcat group=tomcat state=directory recurse=yes
+      become: true
+
+    - name: Change the working directory to Tomcat Apache before running Tomcat Apache
+      shell: ./startup.sh
+      args:
+       chdir: /opt/apache-tomcat-{{ tomcat_version }}/bin/
+      become: true
+      become_user: tomcat
